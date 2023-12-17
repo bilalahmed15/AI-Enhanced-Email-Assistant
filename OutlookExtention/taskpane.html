@@ -35,43 +35,30 @@
           if (asyncResult.status == Office.AsyncResultStatus.Succeeded) {
             let emailBody = asyncResult.value;
 
-            // Create a temporary DOM element to parse the HTML
-            let tempDiv = document.createElement("div");
-            tempDiv.innerHTML = emailBody;
+            // Remove all HTML tags to work with plain text
+            let textContent = emailBody.replace(/<[^>]*>/g, "");
 
-            // Remove all script and style elements
-            Array.from(tempDiv.querySelectorAll("script, style")).forEach(
-              (el) => el.remove()
-            );
+            // Find the index of the "Subject" line
+            let subjectIndex = textContent.indexOf("Subject:");
+            if (subjectIndex !== -1) {
+              // Extract everything after "Subject:"
+              textContent = textContent.substring(subjectIndex);
 
-            // Extract and format the text content
-            let textContent = formatTextContent(tempDiv);
+              // Find the index of the end of the subject line (newline character)
+              let bodyStartIndex = textContent.indexOf("\n", subjectIndex);
+              if (bodyStartIndex !== -1) {
+                // Extract the body content
+                textContent = textContent.substring(bodyStartIndex).trim();
+              }
+            }
 
-            document.getElementById("emailContent").innerText =
-              textContent.trim();
+            document.getElementById("emailContent").innerText = textContent;
           } else {
             document.getElementById("emailContent").innerText =
               "Failed to load email content.";
           }
         }
       );
-    }
-
-    function formatTextContent(element) {
-      let textParts = [];
-      Array.from(element.childNodes).forEach((child) => {
-        if (child.nodeType === 3) {
-          // Node.TEXT_NODE
-          textParts.push(child.nodeValue);
-        } else if (
-          child.nodeType === 1 &&
-          child.tagName.toLowerCase() !== "img"
-        ) {
-          // Node.ELEMENT_NODE
-          textParts.push(formatTextContent(child));
-        }
-      });
-      return textParts.join(" ").replace(/\s+/g, " ");
     }
 
     /**
