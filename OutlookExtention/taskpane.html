@@ -7,12 +7,39 @@
       type="text/javascript"
       src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"
     ></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 10px;
+      }
+      #helloButton {
+        background-color: #0052cc;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      #helloButton:hover {
+        background-color: #0041a3;
+      }
+      #emailContent {
+        margin: 15px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+      }
+      p {
+        margin: 5px 0;
+      }
+    </style>
   </head>
 
   <body>
-    <p id="emailContent">Loading email content...</p>
     <p>This add-in will insert the text 'Hello world!' in a new message.</p>
-    <button id="helloButton">Say hello asdas asdas</button>
+    <button id="helloButton">Say hello</button>
+    <p id="emailContent">Loading email content...</p>
 
     <!-- The following image URL tracks diagnostic data for this sample add-in. Please remove the image tag if you reuse this sample in your own code project. -->
     <img
