@@ -26,7 +26,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://github.com/bilalahmed15/AI-Enhanced-Email-Assistant/blob/main/OutlookExtention/taskpane.html"/>
+        <SourceLocation DefaultValue="https://bilalahmed15.github.io/AI-Enhanced-Email-Assistant/OutlookExtention/taskpane.html"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
@@ -80,7 +80,7 @@
         <bt:Image id="Icon.80x80" DefaultValue="https://officedev.github.io/Office-Add-in-samples/Samples/hello-world/outlook-hello-world/assets/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://github.com/bilalahmed15/AI-Enhanced-Email-Assistant/blob/main/OutlookExtention/taskpane.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://bilalahmed15.github.io/AI-Enhanced-Email-Assistant/OutlookExtention/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="CommandsGroup.Label" DefaultValue="Contoso Add-in"/>

@@ -24,6 +24,7 @@
     Office.onReady((info) => {
       if (info.host === Office.HostType.Outlook) {
         document.getElementById("helloButton").onclick = sayHello;
+        loadEmailContent(); // Call the function to load email content
       }
     });
 
