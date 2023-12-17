@@ -33,17 +33,8 @@
         "text", // Get the body content as plain text
         function (asyncResult) {
           if (asyncResult.status == Office.AsyncResultStatus.Succeeded) {
-            // Process the email content to extract only the relevant text
-            let emailBody = asyncResult.value;
-
-            // Assuming the email body content starts after a blank line following the header
-            let contentStartIndex = emailBody.indexOf("\n\n");
-            if (contentStartIndex !== -1) {
-              emailBody = emailBody.substring(contentStartIndex + 2); // +2 to skip the two newline characters
-            }
-
             document.getElementById("emailContent").innerText =
-              emailBody.trim();
+              asyncResult.value;
           } else {
             document.getElementById("emailContent").innerText =
               "Failed to load email content.";
