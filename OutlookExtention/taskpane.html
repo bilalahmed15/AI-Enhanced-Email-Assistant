@@ -30,29 +30,20 @@
 
     function loadEmailContent() {
       Office.context.mailbox.item.body.getAsync(
-        "html", // Get the body content as HTML
+        "text", // Get the body content as plain text
         function (asyncResult) {
           if (asyncResult.status == Office.AsyncResultStatus.Succeeded) {
+            // Process the email content to extract only the relevant text
             let emailBody = asyncResult.value;
 
-            // Remove all HTML tags to work with plain text
-            let textContent = emailBody.replace(/<[^>]*>/g, "");
-
-            // Find the index of the "Subject" line
-            let subjectIndex = textContent.indexOf("Subject:");
-            if (subjectIndex !== -1) {
-              // Extract everything after "Subject:"
-              textContent = textContent.substring(subjectIndex);
-
-              // Find the index of the end of the subject line (newline character)
-              let bodyStartIndex = textContent.indexOf("\n", subjectIndex);
-              if (bodyStartIndex !== -1) {
-                // Extract the body content
-                textContent = textContent.substring(bodyStartIndex).trim();
-              }
+            // Assuming the email body content starts after a blank line following the header
+            let contentStartIndex = emailBody.indexOf("\n\n");
+            if (contentStartIndex !== -1) {
+              emailBody = emailBody.substring(contentStartIndex + 2); // +2 to skip the two newline characters
             }
 
-            document.getElementById("emailContent").innerText = textContent;
+            document.getElementById("emailContent").innerText =
+              emailBody.trim();
           } else {
             document.getElementById("emailContent").innerText =
               "Failed to load email content.";
