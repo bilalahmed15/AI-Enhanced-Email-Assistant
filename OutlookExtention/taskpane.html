@@ -30,20 +30,25 @@
 
     function loadEmailContent() {
       Office.context.mailbox.item.body.getAsync(
-        "text", // Get the body content as plain text
+        "html", // Get the body content as HTML
         function (asyncResult) {
           if (asyncResult.status == Office.AsyncResultStatus.Succeeded) {
-            // Process the email content to extract only the relevant text
             let emailBody = asyncResult.value;
 
-            // Assuming the email body content starts after a blank line following the header
-            let contentStartIndex = emailBody.indexOf("\n\n");
-            if (contentStartIndex !== -1) {
-              emailBody = emailBody.substring(contentStartIndex + 2); // +2 to skip the two newline characters
+            // Create a temporary DOM element to parse the HTML
+            let tempDiv = document.createElement("div");
+            tempDiv.innerHTML = emailBody;
+
+            // Remove image tags
+            let images = tempDiv.getElementsByTagName("img");
+            while (images.length > 0) {
+              images[0].parentNode.removeChild(images[0]);
             }
 
-            document.getElementById("emailContent").innerText =
-              emailBody.trim();
+            // Extract only the text content
+            let textOnly = tempDiv.textContent || tempDiv.innerText || "";
+
+            document.getElementById("emailContent").innerText = textOnly.trim();
           } else {
             document.getElementById("emailContent").innerText =
               "Failed to load email content.";
