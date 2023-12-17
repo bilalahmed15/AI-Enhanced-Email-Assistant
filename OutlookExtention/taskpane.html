@@ -24,20 +24,35 @@
     Office.onReady((info) => {
       if (info.host === Office.HostType.Outlook) {
         document.getElementById("helloButton").onclick = sayHello;
-        loadEmailContent(); // Call the function to load email content
+        loadEmailContent();
       }
     });
 
     function loadEmailContent() {
+      // First try to get the body content as HTML
       Office.context.mailbox.item.body.getAsync(
-        "text", // Get the body content as plain text
+        "html", // Get the body content as HTML
         function (asyncResult) {
           if (asyncResult.status == Office.AsyncResultStatus.Succeeded) {
-            document.getElementById("emailContent").innerText =
+            // If successful, display the HTML content
+            document.getElementById("emailContent").innerHTML =
               asyncResult.value;
           } else {
-            document.getElementById("emailContent").innerText =
-              "Failed to load email content.";
+            // If failed, try to get the content as plain text
+            Office.context.mailbox.item.body.getAsync(
+              "text", // Get the body content as plain text
+              function (asyncResult) {
+                if (asyncResult.status == Office.AsyncResultStatus.Succeeded) {
+                  // Display the text content
+                  document.getElementById("emailContent").innerText =
+                    asyncResult.value;
+                } else {
+                  // If still fails, show an error message
+                  document.getElementById("emailContent").innerText =
+                    "Failed to load email content.";
+                }
+              }
+            );
           }
         }
       );
