@@ -63,37 +63,32 @@
         loadEmailContent();
       }
     });
-
+  
     function loadEmailContent() {
-      // First try to get the body content as HTML
       Office.context.mailbox.item.body.getAsync(
-        "html", // Get the body content as HTML
+        "text", // Get the body content as plain text
         function (asyncResult) {
           if (asyncResult.status == Office.AsyncResultStatus.Succeeded) {
-            // If successful, display the HTML content
-            document.getElementById("emailContent").innerHTML =
-              asyncResult.value;
+            // Display the text content
+            let emailText = asyncResult.value;
+            // Remove headers from the email text
+            emailText = removeEmailHeaders(emailText);
+            document.getElementById("emailContent").innerText = emailText;
           } else {
-            // If failed, try to get the content as plain text
-            Office.context.mailbox.item.body.getAsync(
-              "text", // Get the body content as plain text
-              function (asyncResult) {
-                if (asyncResult.status == Office.AsyncResultStatus.Succeeded) {
-                  // Display the text content
-                  document.getElementById("emailContent").innerText =
-                    asyncResult.value;
-                } else {
-                  // If still fails, show an error message
-                  document.getElementById("emailContent").innerText =
-                    "Failed to load email content.";
-                }
-              }
-            );
+            // If fails, show an error message
+            document.getElementById("emailContent").innerText =
+              "Failed to load email content.";
           }
         }
       );
     }
 
+    function removeEmailHeaders(text) {
+    // Regular expression to match email headers
+    const headerRegex = /From:.*\nDate:.*\nTo:.*\nSubject:.*\n/g;
+    // Remove headers from the text
+    return text.replace(headerRegex, '');
+  }
     /**
      * Writes 'Hello world!' to a new message body.
      */
