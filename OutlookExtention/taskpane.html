@@ -84,11 +84,17 @@
     }
 
     function removeEmailHeaders(text) {
-    // Regular expression to match email headers
-    const headerRegex = /From:.*\nDate:.*\nTo:.*\nSubject:.*\n/g;
-    // Remove headers from the text
-    return text.replace(headerRegex, '');
-  }
+  // Split the text into lines
+  let lines = text.split('\n');
+
+  // Filter out lines that look like email headers
+  lines = lines.filter(line => {
+    return !line.match(/^(From|Date|To|Subject):/);
+  });
+
+  // Join the lines back into a single string
+  return lines.join('\n');
+}
     /**
      * Writes 'Hello world!' to a new message body.
      */
