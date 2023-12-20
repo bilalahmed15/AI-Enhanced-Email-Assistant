@@ -87,28 +87,28 @@
       return lines.join('\n');
     }
   
-    function setupReplyListener() {
-      // Set up an event listener for changes in the email body
-      Office.context.mailbox.item.body.addHandlerAsync(
-        Office.EventType.ItemChanged,
-        function () {
-          // When the body changes, update the display
-          updateReplyContent();
-        }
-      );
-    }
+    // function setupReplyListener() {
+    //   // Set up an event listener for changes in the email body
+    //   Office.context.mailbox.item.body.addHandlerAsync(
+    //     Office.EventType.ItemChanged,
+    //     function () {
+    //       // When the body changes, update the display
+    //       updateReplyContent();
+    //     }
+    //   );
+    // }
   
-    function updateReplyContent() {
-      Office.context.mailbox.item.body.getAsync(
-        "text",
-        function (asyncResult) {
-          if (asyncResult.status == Office.AsyncResultStatus.Succeeded) {
-            // Display the updated body content
-            document.getElementById("emailContent").innerText = asyncResult.value;
-          }
-        }
-      );
-    }
+    // function updateReplyContent() {
+    //   Office.context.mailbox.item.body.getAsync(
+    //     "text",
+    //     function (asyncResult) {
+    //       if (asyncResult.status == Office.AsyncResultStatus.Succeeded) {
+    //         // Display the updated body content
+    //         document.getElementById("emailContent").innerText = asyncResult.value;
+    //       }
+    //     }
+    //   );
+    // }
   
     function sayHello() {
       Office.context.mailbox.item.body.setAsync(
