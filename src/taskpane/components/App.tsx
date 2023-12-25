@@ -6,6 +6,10 @@ import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 
 /* global require */
 
+if (typeof process !== "undefined" && process.env) {
+  require("dotenv").config();
+}
+
 export interface AppProps {
   title: string;
   isOfficeInitialized: boolean;
@@ -23,7 +27,7 @@ export interface AppState {
 export default class App extends React.Component<AppProps, AppState> {
   constructor(props) {
     super(props);
-  
+
     this.state = {
       generatedText: "",
       startText: "",
@@ -43,32 +47,32 @@ export default class App extends React.Component<AppProps, AppState> {
   generateText = async () => {
     var current = this;
     const configuration = new Configuration({
-      apiKey: "",
+      apiKey: process.env.OPENAI_API_KEY,
     });
     const openai = new OpenAIApi(configuration);
     current.setState({ isLoading: true });
-  
+
     // The original email content and the user's raw reply
     const originalEmailContent = this.state.startText;
-  
+
     const userRawReply = this.state.rawReply;
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
-          content: "You are a helpful assistant. Refine the user's raw reply into a professional response suitable as a reply to the original email.",
+          content:
+            "You are a helpful assistant. Refine the user's raw reply into a professional response suitable as a reply to the original email.",
         },
-        { 
-          role: "user", 
-          content: `Original email: ${originalEmailContent} User's raw reply: ${userRawReply}. Please refine this into a professional response.` 
+        {
+          role: "user",
+          content: `Original email: ${originalEmailContent} User's raw reply: ${userRawReply}. Please refine this into a professional response.`,
         },
       ],
     });
     current.setState({ isLoading: false });
     current.setState({ generatedText: response.data.choices[0].message.content });
   };
-  
 
   insertIntoMail = () => {
     const finalText = this.state.finalMailText.length === 0 ? this.state.generatedText : this.state.finalMailText;
@@ -92,7 +96,7 @@ export default class App extends React.Component<AppProps, AppState> {
       try {
         Office.context.mailbox.item.body.getAsync(Office.CoercionType.Text, async function (asyncResult) {
           const configuration = new Configuration({
-            apiKey: "",
+            apiKey: process.env.OPENAI_API_KEY,
           });
           const openai = new OpenAIApi(configuration);
 
@@ -134,13 +138,13 @@ export default class App extends React.Component<AppProps, AppState> {
   BusinessMailSection = () => {
     return (
       <>
-         <p>Type your raw email reply here:</p>
-      <textarea
-        className="ms-welcome"
-        onChange={(e) => this.setState({ rawReply: e.target.value })}
-        rows={5}
-        cols={40}
-      />
+        <p>Type your raw email reply here:</p>
+        <textarea
+          className="ms-welcome"
+          onChange={(e) => this.setState({ rawReply: e.target.value })}
+          rows={5}
+          cols={40}
+        />
         <p>
           <DefaultButton
             className="ms-welcome__action"
@@ -152,7 +156,6 @@ export default class App extends React.Component<AppProps, AppState> {
         </p>
         <this.ProgressSection />
 
-        
         <textarea
           className="ms-welcome"
           defaultValue={this.state.generatedText}
@@ -193,7 +196,6 @@ export default class App extends React.Component<AppProps, AppState> {
             Outlook AI Assistant
           </h2>
 
-          
           <div>
             <this.BusinessMailSection />
           </div>
