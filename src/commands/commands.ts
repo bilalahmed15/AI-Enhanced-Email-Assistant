@@ -7,6 +7,10 @@
 
 import { Configuration, OpenAIApi } from "openai";
 
+if (typeof process !== "undefined" && process.env) {
+  require("dotenv").config();
+}
+
 Office.onReady(() => {
   // If needed, Office.js is ready to be called
 });
@@ -27,7 +31,7 @@ function getSelectedText(): Promise<any> {
     try {
       Office.context.mailbox.item.body.getAsync(Office.CoercionType.Text, async function (asyncResult) {
         const configuration = new Configuration({
-          apiKey: "",
+          apiKey: process.env.OPENAI_API_KEY,
         });
         const openai = new OpenAIApi(configuration);
         const response = await openai.createChatCompletion({
